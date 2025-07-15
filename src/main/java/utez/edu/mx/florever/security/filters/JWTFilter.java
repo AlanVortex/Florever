@@ -11,7 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import utez.edu.mx.florever.security.jwt.JWTUtils;
-import utez.edu.mx.florever.security.jwt.UDService;
+import utez.edu.mx.florever.security.jwt.UDServices;
+import utez.edu.mx.florever.security.jwt.UDServices;
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     @Autowired
-    private UDService udService; //Este para armar tu pasaporte
+    private UDServices udService; //Este para armar tu pasaporte
     @Autowired
     private JWTUtils jwtUtils;//Este nos va a ayudar a manipular el token
 

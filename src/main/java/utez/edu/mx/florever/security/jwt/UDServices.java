@@ -15,7 +15,7 @@ import java.util.Collections;
 
 //TERCER PASO : Crear nuestro servicio de gestion de autoridades
 @Service
-public class UDService  implements UserDetailsService {
+public class UDServices  implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 

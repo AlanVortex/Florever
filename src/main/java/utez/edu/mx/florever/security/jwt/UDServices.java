@@ -20,10 +20,10 @@ public class UDServices  implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         //Buscar primero al usuario
-        BeanUser found = userRepository.findByUsername(username).orElse(null);
-        if (found == null) throw new UsernameNotFoundException(username);
+        BeanUser found = userRepository.findByEmail(email).orElse(null);
+        if (found == null) throw new UsernameNotFoundException(email);
 
         //Generar las autoridades para el contexto de seguridad
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + found.getRol().getName());
@@ -31,9 +31,10 @@ public class UDServices  implements UserDetailsService {
         //Retornar el objeto de usuario para registrar en el contexto de seguridad
 
         return new User(
-                found.getUsername(),
+                found.getEmail(),
                 found.getPassword(),
                 Collections.singleton(authority)
         );
     }
+
 }

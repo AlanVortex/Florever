@@ -30,23 +30,23 @@ public class AuthServices {
 
     @Transactional(readOnly = true)
     public APIResponse doLogin(LoginRequestDTO payload) {
-        BeanUser found = userRepository.findByUsername(payload.getUsername()).orElse(null);
+        BeanUser found = userRepository.findByEmail(payload.getEmail()).orElse(null);
         try {
             if (found == null) {
                 return new APIResponse(
                         HttpStatus.NOT_FOUND,
                         true,
-                        "Usuario no encontrado"
+                        "Correo no encontrado"
                 );
             }
             if (!PasswordEncoder.verifyPassword(payload.getPassword(), found.getPassword())) {
                 return new APIResponse(
                         HttpStatus.BAD_REQUEST,
                         true,
-                        "Usuario o contraseña no conciden"
+                        "Correo o contraseña no conciden"
                 );
             }
-            UserDetails ud = udService.loadUserByUsername(found.getUsername());
+            UserDetails ud = udService.loadUserByUsername(found.getEmail());
             String token = jwtUtils.generateToken(ud);
             return new APIResponse("Operacion exitosa", HttpStatus.OK, false, token);
         } catch (Exception e) {
@@ -61,24 +61,28 @@ public class AuthServices {
     @Transactional(rollbackFor = {SQLException.class, Exception.class})
     public APIResponse register(BeanUser payload) {
         try {
-            BeanUser found = userRepository.findByUsername(payload.getUsername()).orElse(null);
+            BeanUser found = userRepository.findByEmail(payload.getEmail()).orElse(null);
             if (found != null) {
                 return new APIResponse(
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         true,
                         "Usuario ya existe");
             }
+
+            // 👇 Aquí encripta la contraseña
             payload.setPassword(PasswordEncoder.encode(payload.getPassword()));
             userRepository.save(payload);
-            return new APIResponse("Operacion exitosa", HttpStatus.CREATED, false, "");
+
+            return new APIResponse("Operación exitosa", HttpStatus.CREATED, false, "");
         } catch (Exception e) {
             e.printStackTrace();
             return new APIResponse(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     true,
-                    "Error al registar usuario");
+                    "Error al registrar usuario");
         }
     }
+
 
 
 }

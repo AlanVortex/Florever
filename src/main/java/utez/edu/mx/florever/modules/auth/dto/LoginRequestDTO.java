@@ -3,7 +3,7 @@ package utez.edu.mx.florever.modules.auth.dto;
 
 public class LoginRequestDTO {
 
-    private String username;
+    private String email;
     private String password;
 
     // Constructor vacío
@@ -11,19 +11,20 @@ public class LoginRequestDTO {
     }
 
     // Constructor con todos los campos
-    public LoginRequestDTO(String username, String password) {
-        this.username = username;
+    public LoginRequestDTO(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
     // Getters y Setters
 
-    public String getUsername() {
-        return username;
+
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

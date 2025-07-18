@@ -1,26 +1,40 @@
 package utez.edu.mx.florever.modules.category;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/category")
 public class CategoryController {
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private final CategoryService service;
+
 
     public CategoryController(CategoryService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<Category> getAll() { return service.findAll(); }
+    public List<Category> getAll() {
+        return service.findAll();
+    }
 
     @PostMapping
-    public Category create(@RequestBody Category category) { return service.save(category); }
+    public Category create(@RequestBody Category category) {
+        return service.save(category);
+    }
 
     @GetMapping("/{id}")
-    public Category getById(@PathVariable Long id) { return service.findById(id); }
+    public Category getById(@PathVariable Long id) {
+        return service.findById(id);
+    }
 
     @PutMapping("/{id}")
     public Category update(@PathVariable Long id, @RequestBody Category category) {
@@ -29,5 +43,23 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { service.delete(id); }
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
+
+    @GetMapping("/types")
+    public List<String> getAllTipoCategoria() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(Category::getTipoCategoria)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{tipoCategoria}/all")
+    public List<Category> getByTipoCategoria(@PathVariable String tipoCategoria) {
+        return service.findByTipoCategoria(tipoCategoria);
+    }
+
+
 }

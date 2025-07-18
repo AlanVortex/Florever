@@ -35,7 +35,8 @@ public class MainSecurity {
     };
 
     private final String[] WHITE_LIST = {
-            "/api/auth/**"
+            "/api/auth/**",
+            "/api/categories/**",
     };
 
     @Autowired
@@ -54,6 +55,7 @@ public class MainSecurity {
                         .requestMatchers("/api/cede/**").hasAnyRole("EMPLOYEE")
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers(SWAGGER_PATHS).permitAll()
+                        .requestMatchers(WHITE_LIST).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

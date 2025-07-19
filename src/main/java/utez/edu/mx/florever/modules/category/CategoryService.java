@@ -22,7 +22,27 @@ public class CategoryService {
     public void delete(Long id) { repository.deleteById(id); }
     public Category findById(Long id) { return repository.findById(id).orElse(null); }
 
-    public List<Category> findByTipoCategoria(String tipoCategoria) {
-        return categoryRepository.findByTipoCategoria(tipoCategoria);
+    public List<Category> findByTypeCategory(String typeCategory) {
+        return categoryRepository.findByTypeCategory(typeCategory);
+    }
+
+    public Category update(Long id, Category updatedCategory) {
+        Category existing = findById(id);
+        if (updatedCategory.getName() != null) {
+            existing.setName(updatedCategory.getName());
+        }
+        if (updatedCategory.getDescription() != null) {
+            existing.setDescription(updatedCategory.getDescription());
+        }
+        if (updatedCategory.getPrice() != 0.0) {
+            existing.setPrice(updatedCategory.getPrice());
+        }
+        if (updatedCategory.getTotalQuantityFlowers() != 0) {
+            existing.setTotalQuantityFlowers(updatedCategory.getTotalQuantityFlowers());
+        }
+        if (updatedCategory.getTypeCategory() != null) {
+            existing.setTypeCategory(updatedCategory.getTypeCategory());
+        }
+        return save(existing);
     }
 }

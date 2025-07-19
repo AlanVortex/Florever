@@ -11,23 +11,23 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
-    private String descripcion;
-    private double precio;
-    private int cantidadTotalFlores;
-    private String tipoCategoria;
+    private String name;
+    private String description;
+    private double price;
+    private int totalQuantityFlowers;
+    private String typeCategory;
 
 
     public Category() {
     }
 
-    public Category(Long id, String nombre, String descripcion, double precio, int cantidadTotalFlores, String tipoCategoria) {
+    public Category(Long id, String name, String description, double price, int totalQuantityFlowers, String typeCategory) {
         this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.cantidadTotalFlores = cantidadTotalFlores;
-        this.tipoCategoria = tipoCategoria;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.totalQuantityFlowers = totalQuantityFlowers;
+        this.typeCategory = typeCategory;
     }
 
     public Long getId() {
@@ -38,43 +38,43 @@ public class Category {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public double getPrecio() {
-        return precio;
+    public double getPrice() {
+        return price;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public int getCantidadTotalFlores() {
-        return cantidadTotalFlores;
+    public int getTotalQuantityFlowers() {
+        return totalQuantityFlowers;
     }
 
-    public void setCantidadTotalFlores(int cantidadTotalFlores) {
-        this.cantidadTotalFlores = cantidadTotalFlores;
+    public void setTotalQuantityFlowers(int totalQuantityFlowers) {
+        this.totalQuantityFlowers = totalQuantityFlowers;
     }
 
-    public String getTipoCategoria() {
-        return tipoCategoria;
+    public String getTypeCategory() {
+        return typeCategory;
     }
 
-    public void setTipoCategoria(String tipoCategoria) {
-        this.tipoCategoria = tipoCategoria;
+    public void setTypeCategory(String typeCategory) {
+        this.typeCategory = typeCategory;
     }
 }

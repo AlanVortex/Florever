@@ -38,8 +38,7 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public Category update(@PathVariable Long id, @RequestBody Category category) {
-        category.setId(id);
-        return service.save(category);
+        return service.update(id, category);
     }
 
     @DeleteMapping("/{id}")
@@ -48,17 +47,17 @@ public class CategoryController {
     }
 
     @GetMapping("/types")
-    public List<String> getAllTipoCategoria() {
+    public List<String> getAllTypeCategory() {
         return categoryRepository.findAll()
                 .stream()
-                .map(Category::getTipoCategoria)
+                .map(Category::getTypeCategory)
                 .distinct()
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{tipoCategoria}/all")
-    public List<Category> getByTipoCategoria(@PathVariable String tipoCategoria) {
-        return service.findByTipoCategoria(tipoCategoria);
+    @GetMapping("/{typeCategory}/all")
+    public List<Category> getByTypeCategory(@PathVariable String typeCategory) {
+        return service.findByTypeCategory(typeCategory);
     }
 
 

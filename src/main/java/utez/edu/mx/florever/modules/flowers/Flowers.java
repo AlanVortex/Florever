@@ -6,7 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
+import utez.edu.mx.florever.modules.orderhasflowers.OrderHasFlowers;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "flowers")
@@ -59,6 +62,9 @@ public class Flowers {
     )
     @Column(name = "imagen", length = 255)
     private String imagen;
+
+    @OneToMany(mappedBy = "flowers")
+    private List<OrderHasFlowers> orderHasFlowers;
 
     // Constructor completo
     public Flowers(Long id, String nombre, String tipo, BigDecimal precio, Integer cantidad, String descripcion, String imagen) {

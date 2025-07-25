@@ -1,9 +1,10 @@
 package utez.edu.mx.florever.modules.category;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import utez.edu.mx.florever.modules.order.Order;
+
+import java.util.List;
 
 @Entity
 public class Category {
@@ -13,9 +14,14 @@ public class Category {
 
     private String name;
     private String description;
-    private double price;
+    private Double price;
     private int totalQuantityFlowers;
     private String typeCategory;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "category")
+    private List<Order> orders ;
+
 
 
     public Category() {
@@ -29,7 +35,13 @@ public class Category {
         this.totalQuantityFlowers = totalQuantityFlowers;
         this.typeCategory = typeCategory;
     }
+    public List<Order> getOrders() {
+        return orders;
+    }
 
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
     public Long getId() {
         return id;
     }

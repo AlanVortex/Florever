@@ -1,7 +1,11 @@
 package utez.edu.mx.florever.modules.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import utez.edu.mx.florever.modules.order.Order;
 import utez.edu.mx.florever.modules.role.Rol;
+
+import java.util.List;
 
 //ESTE PASO YA ES IMPLICITO EN LA CREACION DEL PROYECTO
 @Entity
@@ -27,6 +31,10 @@ public class BeanUser {
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders ;
 
     public BeanUser() {
     }

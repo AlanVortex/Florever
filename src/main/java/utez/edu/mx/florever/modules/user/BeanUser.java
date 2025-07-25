@@ -1,7 +1,11 @@
 package utez.edu.mx.florever.modules.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import utez.edu.mx.florever.modules.order.Order;
 import utez.edu.mx.florever.modules.role.Rol;
+
+import java.util.List;
 
 //ESTE PASO YA ES IMPLICITO EN LA CREACION DEL PROYECTO
 @Entity
@@ -9,26 +13,40 @@ import utez.edu.mx.florever.modules.role.Rol;
 public class BeanUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id" , nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "username" , nullable = false)
-    private String username;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "password" , nullable = false)
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
-    public BeanUser(Long id, String username, String password, Rol rol) {
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders ;
+
+    public BeanUser() {
+    }
+
+    public BeanUser(Long id, String name, String phone, String email, String password, Rol rol) {
         this.id = id;
-        this.username = username;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
         this.password = password;
         this.rol = rol;
     }
-    public BeanUser() {}
 
     public Long getId() {
         return id;
@@ -38,12 +56,28 @@ public class BeanUser {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

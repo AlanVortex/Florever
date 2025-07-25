@@ -37,6 +37,7 @@ public class MainSecurity {
     private final String[] WHITE_LIST = {
             "/api/auth/**",
             "/api/category/**",
+            "/api/flowers/**"
     };
 
     @Autowired

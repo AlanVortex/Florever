@@ -17,7 +17,7 @@ public class FlowersService {
     @Transactional(readOnly = true)
     public APIResponse findAll() {
         List<Flowers> list = flowersRepository.findAll();
-        return new APIResponse("Operacion exitosa", list, false, HttpStatus.OK);
+        return new APIResponse("Operacion exitosa", HttpStatus.OK,false, list);
     }
 
     @Transactional(readOnly = true)
@@ -25,12 +25,12 @@ public class FlowersService {
         try{
             Flowers found = flowersRepository.findById(id).orElse(null);
             if (found == null) {
-                return new APIResponse("Flor no encontrada", true, HttpStatus.NOT_FOUND);
+                return new APIResponse(  HttpStatus.NOT_FOUND,true,"Flor no encontrada");
             }
-            return new APIResponse("Operacion exitosa", found, false, HttpStatus.OK);
+            return new APIResponse("Operacion exitosa"  , HttpStatus.OK,false,found);
         }catch (Exception ex) {
             ex.printStackTrace();
-            return new APIResponse("No se pudo consultar la Flor", true, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "No se pudo consultar la Flor");
         }
     }
 
@@ -38,10 +38,10 @@ public class FlowersService {
     public APIResponse save(Flowers payload) {
         try{
             Flowers saved = flowersRepository.save(payload);
-            return new APIResponse("Operacion exitosa", saved, false, HttpStatus.CREATED);
+            return new APIResponse("Operacion exitosa", HttpStatus.CREATED, false,saved);
         }catch (Exception ex) {
             ex.printStackTrace();
-            return new APIResponse("No se pudo registrar la Flor", true, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "No se pudo registrar la Flor");
         }
     }
 
@@ -49,13 +49,13 @@ public class FlowersService {
     public APIResponse update(Flowers payload) {
         try{
             if (flowersRepository.findById(payload.getId()).isEmpty()) {
-                return new APIResponse("Flor no encontrada", true, HttpStatus.NOT_FOUND);
+                return new APIResponse(HttpStatus.NOT_FOUND, true, "Flor no encontrada");
             }
             Flowers updated = flowersRepository.save(payload);
-            return new APIResponse("Operacion exitosa", updated, false, HttpStatus.OK);
+            return new APIResponse("Operacion exitosa", HttpStatus.OK, false,updated);
         }catch (Exception ex) {
             ex.printStackTrace();
-            return new APIResponse("No se pudo actualizar la Flor", true, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "No se pudo actualizar la Flor");
         }
     }
 
@@ -63,13 +63,13 @@ public class FlowersService {
     public APIResponse remove(Flowers payload) {
         try{
             if (flowersRepository.findById(payload.getId()).isEmpty()) {
-                return new APIResponse("Flor no encontrada", true, HttpStatus.NOT_FOUND);
+                return new APIResponse(  HttpStatus.NOT_FOUND,true,"Flor no encontrada");
             }
             flowersRepository.deleteById(payload.getId());
-            return new APIResponse("Operacion exitosa", false, HttpStatus.OK);
+            return new APIResponse(HttpStatus.OK, false, "Operacion exitosa");
         }catch (Exception ex) {
             ex.printStackTrace();
-            return new APIResponse("No se pudo borrar la Flor", true, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "No se pudo borrar la Flor");
         }
     }
 }

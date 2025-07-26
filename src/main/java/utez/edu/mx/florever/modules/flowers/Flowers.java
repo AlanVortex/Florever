@@ -23,29 +23,29 @@ public class Flowers {
             regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ][\\sA-Za-zÁÉÍÓÚáéíóúÑñ]{2,}$",
             message = "Solo se aceptan letras y espacios, mínimo 3 caracteres"
     )
-    @NotNull(message = "Ingresa el nombre de la flor")
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
+    @NotNull(message = "Ingresa el name de la flor")
+    @NotBlank(message = "El name no puede estar vacío")
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Pattern(
             regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ][\\sA-Za-zÁÉÍÓÚáéíóúÑñ]{2,}$",
             message = "Solo se aceptan letras y espacios, mínimo 3 caracteres"
     )
-    @NotNull(message = "Ingresa el tipo de flor")
-    @NotBlank(message = "El tipo no puede estar vacío")
-    @Column(name = "tipo", nullable = false)
-    private String tipo;
+    @NotNull(message = "Ingresa el type de flor")
+    @NotBlank(message = "El type no puede estar vacío")
+    @Column(name = "type", nullable = false)
+    private String type;
 
-    @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
-    @NotNull(message = "Ingresa el precio")
-    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
-    private BigDecimal precio;
+    @DecimalMin(value = "0.01", message = "El price debe ser mayor a 0")
+    @NotNull(message = "Ingresa el price")
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
-    @Min(value = 0, message = "La cantidad no puede ser negativa")
-    @NotNull(message = "Ingresa la cantidad")
-    @Column(name = "cantidad", nullable = false)
-    private Integer cantidad;
+    @Min(value = 0, message = "La amount no puede ser negativa")
+    @NotNull(message = "Ingresa la amount")
+    @Column(name = "amount", nullable = false)
+    private Integer amount;
 
     @Pattern(
             regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9.,;:\\s]{10,}$",
@@ -53,35 +53,35 @@ public class Flowers {
     )
     @NotNull(message = "Ingresa la descripción")
     @NotBlank(message = "La descripción no puede estar vacía")
-    @Column(name = "descripcion", nullable = false, length = 500)
-    private String descripcion;
+    @Column(name = "description", nullable = false, length = 500)
+    private String description;
 
     @Pattern(
             regexp = "^(https?://[\\w\\.-]+\\.[a-zA-Z]{2,}(/[\\w\\.-]*)*\\.(jpg|jpeg|png|gif|webp))$",
-            message = "La imagen debe ser una URL válida con formato jpg, jpeg, png, gif o webp"
+            message = "La image debe ser una URL válida con formato jpg, jpeg, png, gif o webp"
     )
-    @Column(name = "imagen", length = 255)
-    private String imagen;
+    @Column(name = "image", length = 255)
+    private String image;
 
     @OneToMany(mappedBy = "flowers")
     private List<OrderHasFlowers> orderHasFlowers;
 
     // Constructor completo
-    public Flowers(Long id, String nombre, String tipo, BigDecimal precio, Integer cantidad, String descripcion, String imagen) {
+    public Flowers(Long id, String name, String type, BigDecimal price, Integer amount, String description, String image) {
         this.id = id;
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.precio = precio;
-        this.cantidad = cantidad;
-        this.descripcion = descripcion;
-        this.imagen = imagen;
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.amount = amount;
+        this.description = description;
+        this.image = image;
     }
 
     // Constructor vacío
     public Flowers() {
     }
 
-    // Getters y Setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -90,51 +90,59 @@ public class Flowers {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getType() {
+        return type;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public BigDecimal getPrecio() {
-        return precio;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public Integer getCantidad() {
-        return cantidad;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getImage() {
+        return image;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getDescription() {
+        return description;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<OrderHasFlowers> getOrderHasFlowers() {
+        return orderHasFlowers;
+    }
+
+    public void setOrderHasFlowers(List<OrderHasFlowers> orderHasFlowers) {
+        this.orderHasFlowers = orderHasFlowers;
     }
 }

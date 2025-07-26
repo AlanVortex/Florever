@@ -100,7 +100,7 @@ public class OrderService {
                 orderHasFlowers.setOrder(order);
                 orderHasFlowers.setCuantity(payload.getFlowers().get(1).getCuantity());
                 orderHasFlowers.setFlowers(flowers.get());
-                orderHasFlowers.setPrice(payload.getFlowers().get(1).getCuantity() * flowers.get().getPrecio().doubleValue());
+                orderHasFlowers.setPrice(payload.getFlowers().get(1).getCuantity() * flowers.get().getPrice().doubleValue());
                 totalPrice = totalPrice  + orderHasFlowers.getPrice();
                 orderHasFlowersRepository.save(orderHasFlowers);
             }

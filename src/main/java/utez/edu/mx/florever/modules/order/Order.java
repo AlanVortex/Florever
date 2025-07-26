@@ -1,5 +1,6 @@
 package utez.edu.mx.florever.modules.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Bean;
 import utez.edu.mx.florever.modules.category.Category;
@@ -29,9 +30,14 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderHasFlowers> orderHasFlowers;
 
+    @JsonIgnore
    @ManyToOne
    @JoinColumn(name = "fk_user" , nullable = false)
    private BeanUser user;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "fk_florist")
+    private BeanUser florist;
 
     public Order(Long id, Double totalPrice, String status, Category category, List<OrderHasFlowers> orderHasFlowers, BeanUser user) {
         this.id = id;
@@ -41,6 +47,15 @@ public class Order {
         this.orderHasFlowers = orderHasFlowers;
         this.user = user;
     }
+
+    public BeanUser getFlorist() {
+        return florist;
+    }
+
+    public void setFlorist(BeanUser florist) {
+        this.florist = florist;
+    }
+
     public Order() {}
 
     public BeanUser getUser() {

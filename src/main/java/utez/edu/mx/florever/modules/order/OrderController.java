@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.florever.modules.order.dto.DtoOrderPayload;
 import utez.edu.mx.florever.utils.APIResponse;
 
@@ -23,6 +20,28 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<APIResponse> save (@RequestBody DtoOrderPayload payload, HttpServletRequest req) {
         APIResponse response = orderService.save(payload, req);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<APIResponse> allStatus (@PathVariable String status, HttpServletRequest req) {
+        APIResponse response = orderService.findAllByStatus(status , req);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+    @PutMapping("/assign/{id}")
+    public ResponseEntity<APIResponse> update( @PathVariable Long id,HttpServletRequest req) {
+        APIResponse response = orderService.assign(id, req);
+        return new ResponseEntity<>(response, response.getStatus());
+
+    }
+    @PutMapping("/closed/{id}")
+    public ResponseEntity<APIResponse> closed( @PathVariable Long id,HttpServletRequest req) {
+        APIResponse response = orderService.closed(id, req);
+        return new ResponseEntity<>(response, response.getStatus());
+
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<APIResponse> findById(@PathVariable Long id) {
+        APIResponse response = orderService.get(id);
         return new ResponseEntity<>(response, response.getStatus());
     }
 

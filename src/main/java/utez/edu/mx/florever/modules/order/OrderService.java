@@ -46,9 +46,34 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public List<Order> findAllByStatus(String status) {
-        return orderRepository.findAllByStatus(status);
-    }
+    public APIResponse findAllByStatus(String status , HttpServletRequest req) {
+        try {
+
+
+        if (status.equals("OPEN")){
+            List<Order> ordersStatus  =  orderRepository.findAllByStatus("OPEN");
+            if (ordersStatus.isEmpty())
+            {
+                return new APIResponse( HttpStatus.BAD_REQUEST, true,"No se encontro el registro");
+
+            }
+            return new APIResponse("Operacion exitosa", HttpStatus.CREATED, false,ordersStatus);
+        }
+        BeanUser beanUser = userService.getUserByMail(jwtUtils.resolveClaims(req, "sub"));
+
+        List<Order> ordersStatus  =  orderRepository.findAllByStatusAndFlorist_Id(status, beanUser.getId());
+        if (ordersStatus.isEmpty())
+        {
+            return new APIResponse( HttpStatus.BAD_REQUEST, true,"No se encontro el registro");
+
+        }
+        return new APIResponse("Operacion exitosa", HttpStatus.CREATED, false,ordersStatus);
+        }
+        catch (Exception e) {
+            return new APIResponse( HttpStatus.BAD_REQUEST, false,"Error en la busqueda del registro");
+
+        }
+        }
 
     public Order findById(Long id) {
         return orderRepository.findById(id).get();
@@ -65,8 +90,7 @@ public class OrderService {
         order.setStatus("OPEN");
         Category category = categoryService.findById(payload.getCategory());
         order.setCategory(category);
-        order.setTotalPrice(0.0);
-        orderRepository.save(order);
+        order.setTotalPrice(category.getPrice());
         Double totalPrice = 0.0 ;
             for (int i = 0; i < payload.getFlowers().size(); i++) {
 
@@ -91,5 +115,46 @@ public class OrderService {
             return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Error al guardar la orden");
 
         }
+    }
+
+    @Transactional(rollbackFor = {SQLException.class, Exception.class})
+    public APIResponse assign(Long id ,  HttpServletRequest req) {
+        try {
+            BeanUser beanUser = userService.getUserByMail(jwtUtils.resolveClaims(req, "sub"));
+            Order order = orderRepository.findById(id).get();
+            order.setFlorist(beanUser);
+            order.setStatus("PROCESSING");
+            orderRepository.save(order);
+            return new APIResponse("Orden asignada correctamente" , HttpStatus.CREATED , false ,  order);
+
+    }catch (Exception e){
+        return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Error al asignar la orden");
+
+    }
+
+    }
+    @Transactional(rollbackFor = {SQLException.class, Exception.class})
+    public APIResponse closed(Long id ,  HttpServletRequest req) {
+        try {
+            BeanUser beanUser = userService.getUserByMail(jwtUtils.resolveClaims(req, "sub"));
+            Order order = orderRepository.findByIdAndFlorist(id,beanUser).get(0);
+            order.setStatus("CLOSED");
+            orderRepository.save(order);
+            return new APIResponse("Orden terminada correctamente" , HttpStatus.OK , false ,  order);
+
+        }catch (Exception e){
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Error al terminar la orden");
+
+        }
+
+    }
+
+    public APIResponse get(Long id ) {
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isPresent()) {
+           return new APIResponse("Orden terminada correctamente" , HttpStatus.OK , false ,  order);
+
+        }
+        return new APIResponse(HttpStatus.BAD_REQUEST, true, "Orden no encontrada");
     }
 }

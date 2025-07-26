@@ -14,9 +14,6 @@ private List<DtoFlowers> flowers;
         this.status = status;
     }
     public DtoOrderPayload() {}
-    public String getStatus() {
-        return status;
-    }
 
     public void setStatus(String status) {
         this.status = status;

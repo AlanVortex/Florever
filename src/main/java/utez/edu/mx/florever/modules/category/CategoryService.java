@@ -1,5 +1,6 @@
 package utez.edu.mx.florever.modules.category;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public class CategoryService {
     public List<Category> findAll() { return repository.findAll(); }
     public Category save(Category category) { return repository.save(category); }
     public void delete(Long id) { repository.deleteById(id); }
-    public Category findById(Long id) { return repository.findById(id).orElse(null); }
+    public Category findById(Long id) { return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category not found")); }
 
     public List<Category> findByTypeCategory(String typeCategory) {
         return categoryRepository.findByTypeCategory(typeCategory);

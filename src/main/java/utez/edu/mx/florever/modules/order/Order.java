@@ -32,4 +32,62 @@ public class Order {
    @ManyToOne
    @JoinColumn(name = "fk_user" , nullable = false)
    private BeanUser user;
+
+    public Order(Long id, Double totalPrice, String status, Category category, List<OrderHasFlowers> orderHasFlowers, BeanUser user) {
+        this.id = id;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.category = category;
+        this.orderHasFlowers = orderHasFlowers;
+        this.user = user;
+    }
+    public Order() {}
+
+    public BeanUser getUser() {
+        return user;
+    }
+
+    public void setUser(BeanUser user) {
+        this.user = user;
+    }
+
+    public List<OrderHasFlowers> getOrderHasFlowers() {
+        return orderHasFlowers;
+    }
+
+    public void setOrderHasFlowers(List<OrderHasFlowers> orderHasFlowers) {
+        this.orderHasFlowers = orderHasFlowers;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

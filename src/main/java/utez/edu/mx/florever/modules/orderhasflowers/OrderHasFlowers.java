@@ -46,4 +46,28 @@ public class OrderHasFlowers {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Flowers getFlowers() {
+        return flowers;
+    }
+
+    public void setFlowers(Flowers flowers) {
+        this.flowers = flowers;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

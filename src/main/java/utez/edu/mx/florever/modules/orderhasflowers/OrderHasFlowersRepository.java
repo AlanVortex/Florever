@@ -2,10 +2,12 @@ package utez.edu.mx.florever.modules.orderhasflowers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import utez.edu.mx.florever.modules.flowers.Flowers;
 import utez.edu.mx.florever.modules.order.Order;
 
 
-public interface OrderHasFlowersRepository {
+public interface OrderHasFlowersRepository  extends JpaRepository<OrderHasFlowers, Long> {
 
 }

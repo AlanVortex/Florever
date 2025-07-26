@@ -1,8 +1,10 @@
 package utez.edu.mx.florever.security.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import java.util.function.Function;
 public class JWTUtils {
     @Value("${secret.key}")
     private String SECRET_KEY;
+    private final String TOKEN_HEADER = "Authorization";
+    private final String TOKEN_TYPE = "Bearer ";
 
     //Esta funcion ayuda a extraer todas la propiedades del token
     //Es decir , el cuerpo del token
@@ -69,5 +73,32 @@ public class JWTUtils {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims , userDetails.getUsername());
     }
+    public String resolveClaims(HttpServletRequest req , String claimsGet) {
+        try {
+            Claims claims =  resolveClaims(req);
+            if (claims != null) {
+                return (String) claims.get(claimsGet);
+            }
 
+            return null;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    public Claims resolveClaims(HttpServletRequest req) {
+        try {
+            String token = resolveToken(req);
+            if (token != null)
+                return exctractAllClaims(token);
+            return null;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    public String resolveToken(HttpServletRequest req) {
+        String bearerToken = req.getHeader(TOKEN_HEADER);
+        if (bearerToken != null && bearerToken.startsWith(TOKEN_TYPE))
+            return bearerToken.replace(TOKEN_TYPE, "");
+        return null;
+    }
 }

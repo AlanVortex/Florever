@@ -35,6 +35,9 @@ public class BeanUser {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders ;
+    @JsonIgnore
+    @OneToMany(mappedBy = "florist")
+    private List<Order> ordersFlorist ;
 
     public BeanUser() {
     }

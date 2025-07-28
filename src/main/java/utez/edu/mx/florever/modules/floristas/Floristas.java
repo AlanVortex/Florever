@@ -24,7 +24,7 @@ public class Floristas {
     @NotNull(message = "Ingresa el nombre completo del florista")
     @NotBlank(message = "El nombre completo no puede estar vacío")
     @Column(name = "nombre_completo", nullable = false)
-    private String nombreCompleto;
+    private String fullname;
 
     @Pattern(
             regexp = "^[0-9]{10,15}$",
@@ -33,13 +33,13 @@ public class Floristas {
     @NotNull(message = "Ingresa el teléfono")
     @NotBlank(message = "El teléfono no puede estar vacío")
     @Column(name = "telefono", nullable = false, length = 20)
-    private String telefono;
+    private String telephone;
 
     @Email(message = "Ingresa un correo electrónico válido")
     @NotNull(message = "Ingresa el correo electrónico")
     @NotBlank(message = "El correo no puede estar vacío")
     @Column(name = "correo", nullable = false, unique = true, length = 255)
-    private String correo;
+    private String email;
 
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d@$!%*?&]{8,}$",
@@ -56,26 +56,24 @@ public class Floristas {
     )
     @NotNull(message = "Ingresa el estado")
     @Column(name = "estado", nullable = false)
-    private String estado;
+    private String status;
 
     @OneToMany(mappedBy = "florista")
     private List<Order> orders;
 
-    // Constructor completo
-    public Floristas(Long id, String nombreCompleto, String telefono, String correo, String password, String estado) {
-        this.id = id;
-        this.nombreCompleto = nombreCompleto;
-        this.telefono = telefono;
-        this.correo = correo;
-        this.password = password;
-        this.estado = estado;
-    }
-
-    // Constructor vacío
     public Floristas() {
     }
 
-    // Getters and Setters
+    public Floristas(Long id, String fullname, String telephone, String password, String email, String status, List<Order> orders) {
+        this.id = id;
+        this.fullname = fullname;
+        this.telephone = telephone;
+        this.password = password;
+        this.email = email;
+        this.status = status;
+        this.orders = orders;
+    }
+
     public Long getId() {
         return id;
     }
@@ -84,28 +82,28 @@ public class Floristas {
         this.id = id;
     }
 
-    public String getNombreCompleto() {
-        return nombreCompleto;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -116,12 +114,12 @@ public class Floristas {
         this.password = password;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getStatus() {
+        return status;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<Order> getOrders() {

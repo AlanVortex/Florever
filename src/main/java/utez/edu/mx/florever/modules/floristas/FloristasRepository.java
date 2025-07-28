@@ -16,15 +16,4 @@ public interface FloristasRepository extends JpaRepository<Floristas, Long> {
     @Modifying
     @Query(value = "DELETE FROM floristas WHERE id = :id", nativeQuery = true)
     void deleteById(@Param("id") Long id);
-
-    // Métodos adicionales específicos para floristas
-    Optional<Floristas> findByCorreo(String correo);
-
-    List<Floristas> findByEstado(String estado);
-
-    @Query(value = "SELECT * FROM floristas WHERE estado = 'activo'", nativeQuery = true)
-    List<Floristas> findActiveFloristas();
-
-    @Query(value = "SELECT * FROM floristas WHERE nombre_completo LIKE %:nombre% OR correo LIKE %:correo%", nativeQuery = true)
-    List<Floristas> findByNombreOrCorreo(@Param("nombre") String nombre, @Param("correo") String correo);
 }

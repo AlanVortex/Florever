@@ -6,10 +6,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.florever.modules.auth.dto.LoginRequestDTO;
+import utez.edu.mx.florever.modules.role.Rol;
+import utez.edu.mx.florever.modules.role.RolRepository;
 import utez.edu.mx.florever.modules.user.BeanUser;
 import utez.edu.mx.florever.modules.user.UserRepository;
 import utez.edu.mx.florever.security.jwt.JWTUtils;
-import utez.edu.mx.florever.security.jwt.UDServices;
 import utez.edu.mx.florever.security.jwt.UDServices;
 import utez.edu.mx.florever.utils.APIResponse;
 import utez.edu.mx.florever.utils.PasswordEncoder;
@@ -22,11 +23,13 @@ public class AuthServices {
     private UserRepository userRepository;
 
     @Autowired
+    private RolRepository rolRepository;
+
+    @Autowired
     private UDServices udService;
 
     @Autowired
     private JWTUtils jwtUtils;
-
 
     @Transactional(readOnly = true)
     public APIResponse doLogin(LoginRequestDTO payload) {
@@ -69,8 +72,17 @@ public class AuthServices {
                         "Usuario ya existe");
             }
 
-            // 👇 Aquí encripta la contraseña
+            // Encripta la contraseña
             payload.setPassword(PasswordEncoder.encode(payload.getPassword()));
+
+            // Si no tiene rol asignado, asignar rol "cliente" por defecto
+            if (payload.getRol() == null) {
+                Rol clienteRole = rolRepository.findByName("cliente").orElse(null);
+                if (clienteRole != null) {
+                    payload.setRol(clienteRole);
+                }
+            }
+
             userRepository.save(payload);
 
             return new APIResponse("Operación exitosa", HttpStatus.CREATED, false, "");
@@ -83,6 +95,29 @@ public class AuthServices {
         }
     }
 
+    @Transactional(rollbackFor = {SQLException.class, Exception.class})
+    public APIResponse registerFlorista(BeanUser payload) {
+        try {
+            BeanUser found = userRepository.findByEmail(payload.getEmail()).orElse(null);
+            if (found != null) {
+                return new APIResponse(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        true,
+                        "Usuario ya existe");
+            }
 
+            // Encripta la contraseña
+            payload.setPassword(PasswordEncoder.encode(payload.getPassword()));
 
+            userRepository.save(payload);
+
+            return new APIResponse("Florista registrado exitosamente", HttpStatus.CREATED, false, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new APIResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    true,
+                    "Error al registrar florista");
+        }
+    }
 }

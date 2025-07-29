@@ -38,7 +38,8 @@ public class MainSecurity {
             "/api/auth/**",
             "/api/category/**",
             "/api/flowers/**",
-            "/api/order/**"
+            "/api/order/**",
+            "/api/floristas/**"
     };
 
     @Autowired

@@ -2,9 +2,9 @@ package utez.edu.mx.florever.utils;
 
 import org.springframework.http.HttpStatus;
 
-public class APIResponse {
+public class APIResponse<T> {
     private String message;
-    private Object data;
+    private T data;
     private boolean error;
     private HttpStatus status;
 
@@ -14,7 +14,7 @@ public class APIResponse {
         this.message = message;
     }
 
-    public APIResponse(String message, HttpStatus status, boolean error, Object data) {
+    public APIResponse(String message, HttpStatus status, boolean error, T data) {
         this.message = message;
         this.status = status;
         this.error = error;
@@ -37,11 +37,11 @@ public class APIResponse {
         this.error = error;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

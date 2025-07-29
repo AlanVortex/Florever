@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import utez.edu.mx.florever.utils.APIResponse;
+import org.springframework.web.bind.annotation.*;
+import utez.edu.mx.florever.utils.APIResponse;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,5 +64,13 @@ public class CategoryController {
         return service.findByTypeCategory(typeCategory);
     }
 
+    @GetMapping("/apiresponse")
+    public APIResponse<List<Category>> getAllApiResponse() {
+        return service.findAllApiResponse();
+    }
 
+    @GetMapping("/apiresponse/{id}")
+    public APIResponse<Category> getByIdApiResponse(@PathVariable Long id) {
+        return service.findByIdApiResponse(id);
+    }
 }

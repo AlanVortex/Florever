@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.florever.modules.order.dto.DtoOrderPayload;
 import utez.edu.mx.florever.utils.APIResponse;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/order")
 @Tag(name = "Controlador de Ordenes", description = "Operaciones relacionadas con ordenes")
@@ -43,6 +45,11 @@ public class OrderController {
     public ResponseEntity<APIResponse> findById(@PathVariable Long id) {
         APIResponse response = orderService.get(id);
         return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @GetMapping("/user/{userId}/history")
+    public List<Order> getOrderHistory(@PathVariable Long userId) {
+        return orderService.getOrdersByUserId(userId);
     }
 
 }

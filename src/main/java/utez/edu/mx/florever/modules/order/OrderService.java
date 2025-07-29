@@ -157,4 +157,9 @@ public class OrderService {
         }
         return new APIResponse(HttpStatus.BAD_REQUEST, true, "Orden no encontrada");
     }
+
+    public List<Order> getOrdersByUserId(Long userId) {
+        return orderRepository.findByUser_Id(userId);
+    }
+
 }

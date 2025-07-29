@@ -2,7 +2,6 @@ package utez.edu.mx.florever.modules.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Bean;
 import utez.edu.mx.florever.modules.category.Category;
 import utez.edu.mx.florever.modules.orderhasflowers.OrderHasFlowers;
 import utez.edu.mx.florever.modules.user.BeanUser;

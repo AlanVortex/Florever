@@ -109,16 +109,6 @@ public class AuthServices {
             // Encripta la contraseña
             payload.setPassword(PasswordEncoder.encode(payload.getPassword()));
 
-            // Asignar rol de florista automáticamente
-            Rol floristaRole = rolRepository.findByName("florista").orElse(null);
-            if (floristaRole == null) {
-                return new APIResponse(
-                        HttpStatus.INTERNAL_SERVER_ERROR,
-                        true,
-                        "Rol de florista no encontrado en el sistema");
-            }
-
-            payload.setRol(floristaRole);
             userRepository.save(payload);
 
             return new APIResponse("Florista registrado exitosamente", HttpStatus.CREATED, false, "");

@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.florever.modules.auth.AuthServices;
+import utez.edu.mx.florever.modules.role.Rol;
+import utez.edu.mx.florever.modules.role.RolRepository;
 import utez.edu.mx.florever.modules.user.BeanUser;
 import utez.edu.mx.florever.modules.user.UserService;
 import utez.edu.mx.florever.security.jwt.JWTUtils;
@@ -23,6 +25,9 @@ public class FloristasService {
 
     @Autowired
     private JWTUtils jwtUtils;
+
+    @Autowired
+    private RolRepository rolRepository;
 
     @Transactional(readOnly = true)
     public APIResponse findAll() {
@@ -46,10 +51,11 @@ public class FloristasService {
             String currentUserEmail = jwtUtils.exctractUsername(token);
             BeanUser currentUser = userService.getUserByMail(currentUserEmail);
 
-            if (!"admin".equals(currentUser.getRol().getName())) {
+            if (!"ADMIN".equals(currentUser.getRol().getName())) {
                 return new APIResponse(HttpStatus.FORBIDDEN, true, "Solo los administradores pueden crear floristas");
             }
-
+            Rol floristaRol = rolRepository.findByName("FLORIST").get();
+            payload.setRol(floristaRol);
             // Registrar florista usando AuthServices
             return authServices.registerFlorista(payload);
 

@@ -34,7 +34,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public APIResponse findAllFloristas() {
         try {
-            Rol floristaRole = rolRepository.findByName("florista").orElse(null);
+            Rol floristaRole = rolRepository.findByName("FLORIST").orElse(null);
             if (floristaRole == null) {
                 return new APIResponse(HttpStatus.NOT_FOUND, true, "Rol florista no encontrado");
             }
@@ -56,7 +56,7 @@ public class UserService {
             }
 
             BeanUser user = found.get();
-            if (!"florista".equals(user.getRol().getName())) {
+            if (!"FLORIST".equals(user.getRol().getName())) {
                 return new APIResponse(HttpStatus.BAD_REQUEST, true, "El usuario no es un florista");
             }
 
@@ -88,11 +88,11 @@ public class UserService {
             String userRole = userToUpdate.getRol().getName();
 
             // Validaciones de permisos
-            if ("florista".equals(userRole)) {
+            if ("FLORIST".equals(userRole)) {
                 // Si es florista, solo puede editarse a sí mismo
                 if (!currentUser.getId().equals(userToUpdate.getId())) {
                     // A menos que el usuario actual sea admin
-                    if (!"admin".equals(currentUser.getRol().getName())) {
+                    if (!"ADMIN".equals(currentUser.getRol().getName())) {
                         return new APIResponse(HttpStatus.FORBIDDEN, true, "No tienes permisos para editar este florista");
                     }
                 }
@@ -103,9 +103,9 @@ public class UserService {
                         !payload.getRol().getId().equals(userToUpdate.getRol().getId())) {
                     return new APIResponse(HttpStatus.FORBIDDEN, true, "No puedes cambiar tu propio rol");
                 }
-            } else if ("admin".equals(userRole)) {
+            } else if ("ADMIN".equals(userRole)) {
                 // Solo admin puede editar otros admins
-                if (!"admin".equals(currentUser.getRol().getName())) {
+                if (!"ADMIN".equals(currentUser.getRol().getName())) {
                     return new APIResponse(HttpStatus.FORBIDDEN, true, "No tienes permisos para editar administradores");
                 }
             }
@@ -125,7 +125,7 @@ public class UserService {
             }
 
             // Solo admin puede cambiar roles
-            if (payload.getRol() != null && "admin".equals(currentUser.getRol().getName())) {
+            if (payload.getRol() != null && "ADMIN".equals(currentUser.getRol().getName())) {
                 userToUpdate.setRol(payload.getRol());
             }
 
@@ -159,7 +159,7 @@ public class UserService {
             String targetUserRole = targetUser.getRol().getName();
 
             // Solo admin puede eliminar floristas y otros usuarios
-            if (!"admin".equals(currentUser.getRol().getName())) {
+            if (!"ADMIN".equals(currentUser.getRol().getName())) {
                 return new APIResponse(HttpStatus.FORBIDDEN, true, "No tienes permisos para eliminar usuarios");
             }
 

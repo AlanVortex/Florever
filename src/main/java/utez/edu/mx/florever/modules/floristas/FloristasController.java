@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import utez.edu.mx.florever.security.jwt.JWTUtils;
+import utez.edu.mx.florever.modules.user.BeanUser;
 import utez.edu.mx.florever.utils.APIResponse;
 
 @RestController
@@ -74,11 +74,19 @@ public class FloristasController {
     }
 
     @PostMapping("")
-    @Operation(summary = "Registrar Florista", description = "Agrega un nuevo florista al sistema")
+    @Operation(summary = "Registrar Florista", description = "Agrega un nuevo florista al sistema (Solo Admin)")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
                     description = "Registro de florista completo",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
+                            @Content(mediaType = "application/xml", schema = @Schema(implementation = APIResponse.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tienes permisos para crear floristas",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
                             @Content(mediaType = "application/xml", schema = @Schema(implementation = APIResponse.class))
@@ -93,8 +101,8 @@ public class FloristasController {
                     }
             )
     })
-    public ResponseEntity<APIResponse> save(@RequestBody @Valid Floristas payload) {
-        APIResponse response = floristasService.save(payload);
+    public ResponseEntity<APIResponse> save(@RequestBody @Valid BeanUser payload, HttpServletRequest request) {
+        APIResponse response = floristasService.save(payload, request);
         return new ResponseEntity<>(response, response.getStatus());
     }
 
@@ -104,6 +112,14 @@ public class FloristasController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Actualización de florista completa",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
+                            @Content(mediaType = "application/xml", schema = @Schema(implementation = APIResponse.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tienes permisos para actualizar este florista",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
                             @Content(mediaType = "application/xml", schema = @Schema(implementation = APIResponse.class))
@@ -126,17 +142,25 @@ public class FloristasController {
                     }
             )
     })
-    public ResponseEntity<APIResponse> update(@RequestBody @Valid Floristas payload) {
-        APIResponse response = floristasService.update(payload);
+    public ResponseEntity<APIResponse> update(@RequestBody @Valid BeanUser payload, HttpServletRequest request) {
+        APIResponse response = floristasService.update(payload, request);
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @DeleteMapping("")
-    @Operation(summary = "Eliminar Florista", description = "Elimina un florista")
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar Florista", description = "Elimina un florista (Solo Admin)")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "Eliminación de florista completa",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
+                            @Content(mediaType = "application/xml", schema = @Schema(implementation = APIResponse.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tienes permisos para eliminar floristas",
                     content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class)),
                             @Content(mediaType = "application/xml", schema = @Schema(implementation = APIResponse.class))
@@ -159,8 +183,8 @@ public class FloristasController {
                     }
             )
     })
-    public ResponseEntity<APIResponse> delete(@RequestBody Floristas payload) {
-        APIResponse response = floristasService.remove(payload);
+    public ResponseEntity<APIResponse> delete(@PathVariable("id") Long id, HttpServletRequest request) {
+        APIResponse response = floristasService.remove(id, request);
         return new ResponseEntity<>(response, response.getStatus());
     }
 }

@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class APIResponse<T> {
     private String message;
-    private T data;
+    private Object data;
     private boolean error;
     private HttpStatus status;
 
@@ -37,11 +37,11 @@ public class APIResponse<T> {
         this.error = error;
     }
 
-    public T getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 

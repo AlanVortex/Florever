@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.florever.modules.auth.dto.LoginRequestDTO;
+import utez.edu.mx.florever.modules.auth.dto.TokenRoleDto;
 import utez.edu.mx.florever.modules.role.Rol;
 import utez.edu.mx.florever.modules.role.RolRepository;
 import utez.edu.mx.florever.modules.user.BeanUser;
@@ -51,7 +52,8 @@ public class AuthServices {
             }
             UserDetails ud = udService.loadUserByUsername(found.getEmail());
             String token = jwtUtils.generateToken(ud);
-            return new APIResponse("Operacion exitosa", HttpStatus.OK, false, token);
+            TokenRoleDto tr = new TokenRoleDto(token, found.getRol().getName());
+            return new APIResponse("Operacion exitosa", HttpStatus.OK, false, tr);
         } catch (Exception e) {
             e.printStackTrace();
             return new APIResponse(

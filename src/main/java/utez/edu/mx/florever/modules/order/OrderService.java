@@ -98,18 +98,24 @@ public class OrderService {
 
             OrderHasFlowers orderHasFlowers = new OrderHasFlowers();
             Optional<Flowers> flowers = flowersRepository.findById(payload.getFlowers().get(i).getFlowerId());
-            if (flowers.isPresent()) {
+            if (flowers.isEmpty()) {
+                    return new APIResponse(HttpStatus.BAD_REQUEST, true, "No existe el id de la flor");
+                }
+            if (flowers.get().getAmount() < payload.getFlowers().get(i).getCuantity()){
+                return new APIResponse(  HttpStatus.BAD_REQUEST , true ,  "Se agoto el stock de la flor " + flowers.get().getName());
+
+            }
+
                 orderHasFlowers.setOrder(order);
                 orderHasFlowers.setCuantity(payload.getFlowers().get(i).getCuantity());
                 orderHasFlowers.setFlowers(flowers.get());
                 orderHasFlowers.setPrice(payload.getFlowers().get(i).getCuantity() * flowers.get().getPrice().doubleValue());
                 totalPrice = totalPrice  + orderHasFlowers.getPrice();
+                flowers.get().setAmount(flowers.get().getAmount() - payload.getFlowers().get(i).getCuantity());
                 orderHasFlowersRepository.save(orderHasFlowers);
-            }
-            else {
-                throw  new Exception("No se encontro el registro");
-            }
-            order.setTotalPrice(totalPrice);
+                flowersRepository.save(flowers.get());
+
+            order.setTotalPrice(order.getTotalPrice()+  totalPrice);
             orderRepository.save(order);
 
         }
@@ -117,6 +123,7 @@ public class OrderService {
 
             return new APIResponse("Orden creada" , HttpStatus.CREATED , false ,  order);
         }catch (Exception e){
+            System.out.println(e);
             return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Error al guardar la orden");
 
         }

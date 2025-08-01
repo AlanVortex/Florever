@@ -170,11 +170,13 @@ public class OrderService {
         return new APIResponse(HttpStatus.BAD_REQUEST, true, "Orden no encontrada");
     }
 
-    public APIResponse getOrdersByUserId(Long userId) {
+    public APIResponse getOrdersByUserId(HttpServletRequest req) {
         try {
-            return new APIResponse("",HttpStatus.OK,false , orderRepository.findByUser_Id(userId) );
+            BeanUser beanUser = userService.getUserByMail(jwtUtils.resolveClaims(req, "sub"));
+            return new APIResponse("Historico de usuarios",HttpStatus.OK,false , orderRepository.findByUser(beanUser));
         }catch (Exception e){
-            return new APIResponse(HttpStatus.BAD_REQUEST, true, "Orden no encontrada");
+            System.out.println(e);
+            return new APIResponse(HttpStatus.BAD_REQUEST, true, "Error al obtener el usuario o  busqueda de las ordenes");
 
         }
     }

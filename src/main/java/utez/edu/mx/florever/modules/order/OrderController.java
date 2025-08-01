@@ -173,9 +173,9 @@ public class OrderController {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @GetMapping("/user/{userId}/history")
-    public ResponseEntity getOrderHistory(@PathVariable Long userId) {
-        APIResponse response = orderService.getOrdersByUserId(userId);
+    @GetMapping("/user/history")
+    public ResponseEntity getOrderHistory(HttpServletRequest req) {
+        APIResponse response = orderService.getOrdersByUserId(req);
         return new ResponseEntity<>(response, response.getStatus());
     }
 

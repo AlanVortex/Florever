@@ -138,4 +138,30 @@ public class FloristasService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public APIResponse findByToken(HttpServletRequest request) {
+        try {
+            String token = jwtUtils.resolveToken(request);
+            if (token == null) {
+                return new APIResponse(HttpStatus.UNAUTHORIZED, true, "Token no proporcionado");
+            }
+
+            String email = jwtUtils.exctractUsername(token);
+            if (email == null || email.isEmpty()) {
+                return new APIResponse(HttpStatus.UNAUTHORIZED, true, "Token inválido");
+            }
+
+            BeanUser user = userService.getUserByMail(email);
+            if (user == null || !"FLORIST".equals(user.getRol().getName())) {
+                return new APIResponse(HttpStatus.NOT_FOUND, true, "Florista no encontrado o sin permisos");
+            }
+
+            return new APIResponse("Perfil encontrado", HttpStatus.OK, false, user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Error al obtener el perfil del florista");
+        }
+    }
+
+
 }

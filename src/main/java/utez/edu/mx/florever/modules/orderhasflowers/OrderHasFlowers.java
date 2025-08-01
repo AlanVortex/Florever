@@ -19,7 +19,6 @@ public class OrderHasFlowers {
 
     private Double price;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_flowers" , nullable = false)
     private Flowers flowers ;

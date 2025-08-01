@@ -234,4 +234,33 @@ public class FloristasController {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
+    @GetMapping("/me")
+    @Operation(summary = "Obtener mi perfil", description = "Devuelve el perfil del florista autenticado")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Perfil encontrado",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Token inválido o no proporcionado",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Florista no encontrado",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+            )
+    })
+    public ResponseEntity<APIResponse> getMyProfile(HttpServletRequest request) {
+        APIResponse response = floristasService.findByToken(request);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
 }

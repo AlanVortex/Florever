@@ -92,17 +92,22 @@ public class OrderService {
         order.setCategory(category);
         order.setTotalPrice(category.getPrice());
         Double totalPrice = 0.0 ;
+        orderRepository.save(order);
+            System.out.println(payload.getFlowers().size());
             for (int i = 0; i < payload.getFlowers().size(); i++) {
 
             OrderHasFlowers orderHasFlowers = new OrderHasFlowers();
-            Optional<Flowers> flowers = flowersRepository.findById(payload.getFlowers().get(1).getFlowerId());
+            Optional<Flowers> flowers = flowersRepository.findById(payload.getFlowers().get(i).getFlowerId());
             if (flowers.isPresent()) {
                 orderHasFlowers.setOrder(order);
-                orderHasFlowers.setCuantity(payload.getFlowers().get(1).getCuantity());
+                orderHasFlowers.setCuantity(payload.getFlowers().get(i).getCuantity());
                 orderHasFlowers.setFlowers(flowers.get());
-                orderHasFlowers.setPrice(payload.getFlowers().get(1).getCuantity() * flowers.get().getPrice().doubleValue());
+                orderHasFlowers.setPrice(payload.getFlowers().get(i).getCuantity() * flowers.get().getPrice().doubleValue());
                 totalPrice = totalPrice  + orderHasFlowers.getPrice();
                 orderHasFlowersRepository.save(orderHasFlowers);
+            }
+            else {
+                throw  new Exception("No se encontro el registro");
             }
             order.setTotalPrice(totalPrice);
             orderRepository.save(order);

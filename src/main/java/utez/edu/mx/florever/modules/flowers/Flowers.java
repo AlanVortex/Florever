@@ -1,5 +1,6 @@
 package utez.edu.mx.florever.modules.flowers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -62,7 +63,7 @@ public class Flowers {
     )
     @Column(name = "image", length = 255)
     private String image;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "flowers")
     private List<OrderHasFlowers> orderHasFlowers;
 

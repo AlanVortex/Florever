@@ -9,11 +9,13 @@ import utez.edu.mx.florever.modules.auth.AuthServices;
 import utez.edu.mx.florever.modules.role.Rol;
 import utez.edu.mx.florever.modules.role.RolRepository;
 import utez.edu.mx.florever.modules.user.BeanUser;
+import utez.edu.mx.florever.modules.user.UserRepository;
 import utez.edu.mx.florever.modules.user.UserService;
 import utez.edu.mx.florever.security.jwt.JWTUtils;
 import utez.edu.mx.florever.utils.APIResponse;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Service
 public class FloristasService {
@@ -28,6 +30,9 @@ public class FloristasService {
 
     @Autowired
     private RolRepository rolRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public APIResponse findAll() {
@@ -100,4 +105,37 @@ public class FloristasService {
             return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "No se pudo eliminar el florista");
         }
     }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public APIResponse updateStatus(Long id, boolean status, HttpServletRequest request) {
+        try {
+            // Primero verificamos que el florista existe
+            Optional<BeanUser> optionalFlorist = userRepository.findById(id);
+            if (optionalFlorist.isEmpty()) {
+                return new APIResponse(HttpStatus.NOT_FOUND, true, "Florista no encontrado");
+            }
+
+            // Aquí podrías agregar validación de permisos según tu lógica, ejemplo que solo admin pueda cambiar status
+            String token = jwtUtils.resolveToken(request);
+            if (token == null) {
+                return new APIResponse(HttpStatus.UNAUTHORIZED, true, "Token no proporcionado");
+            }
+            String currentUserEmail = jwtUtils.exctractUsername(token);
+            BeanUser currentUser = userService.getUserByMail(currentUserEmail);
+            if (!"ADMIN".equals(currentUser.getRol().getName())) {
+                return new APIResponse(HttpStatus.FORBIDDEN, true, "Solo administradores pueden cambiar el estado");
+            }
+
+            // Actualizar el status
+            BeanUser florist = optionalFlorist.get();
+            florist.setStatus(status);
+            userRepository.save(florist);
+
+            return new APIResponse("Estado actualizado correctamente", HttpStatus.OK, false, florist);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new APIResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "No se pudo actualizar el estado");
+        }
+    }
+
 }

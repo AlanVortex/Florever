@@ -10,9 +10,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.florever.modules.user.BeanUser;
+import utez.edu.mx.florever.security.jwt.JWTUtils;
 import utez.edu.mx.florever.utils.APIResponse;
 
 @RestController
@@ -22,6 +24,9 @@ import utez.edu.mx.florever.utils.APIResponse;
 public class FloristasController {
     @Autowired
     private FloristasService floristasService;
+
+    @Autowired
+    private JWTUtils jwtUtils;
 
     @GetMapping("")
     @Operation(summary = "Traer Floristas", description = "Trae todos los floristas")
@@ -187,4 +192,46 @@ public class FloristasController {
         APIResponse response = floristasService.remove(id, request);
         return new ResponseEntity<>(response, response.getStatus());
     }
+
+    @PatchMapping("/{id}/status")
+    @Operation(summary = "Cambiar estado de florista", description = "Activa o desactiva un florista")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Estado actualizado correctamente",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Florista no encontrado",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "No tienes permisos para actualizar el estado",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = APIResponse.class))
+                    }
+            )
+    })
+    public ResponseEntity<APIResponse> toggleStatus(
+            @PathVariable("id") Long id,
+            @RequestParam("status") boolean status,
+            HttpServletRequest request) {
+
+        APIResponse response = floristasService.updateStatus(id, status, request);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
 }

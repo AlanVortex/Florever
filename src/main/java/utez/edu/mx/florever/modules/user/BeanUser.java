@@ -28,6 +28,9 @@ public class BeanUser {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "status", nullable = false)
+    private Boolean status = true;
+
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
@@ -49,6 +52,7 @@ public class BeanUser {
         this.email = email;
         this.password = password;
         this.rol = rol;
+        this.status = true;
     }
 
     public Long getId() {
@@ -97,5 +101,12 @@ public class BeanUser {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

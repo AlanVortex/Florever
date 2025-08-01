@@ -123,6 +123,9 @@ public class UserService {
             if (payload.getPassword() != null && !payload.getPassword().trim().isEmpty()) {
                 userToUpdate.setPassword(PasswordEncoder.encode(payload.getPassword()));
             }
+            if (payload.getStatus() != null) {
+                userToUpdate.setStatus(payload.getStatus());
+            }
 
             // Solo admin puede cambiar roles
             if (payload.getRol() != null && "ADMIN".equals(currentUser.getRol().getName())) {

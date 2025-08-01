@@ -17,6 +17,7 @@ import utez.edu.mx.florever.utils.APIResponse;
 import utez.edu.mx.florever.utils.PasswordEncoder;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Service
 public class AuthServices {
@@ -42,6 +43,15 @@ public class AuthServices {
                         true,
                         "Correo no encontrado"
                 );
+            }
+
+            Optional<BeanUser> userOptional = userRepository.findByEmail(payload.getEmail());
+            if (userOptional.isEmpty()) {
+                return new APIResponse(HttpStatus.NOT_FOUND, true, "Usuario no encontrado");
+            }
+            BeanUser user = userOptional.get();
+            if (!user.getStatus()) {
+                return new APIResponse(HttpStatus.UNAUTHORIZED, true, "Tu cuenta está inactiva. Contacta al administrador.");
             }
             if (!PasswordEncoder.verifyPassword(payload.getPassword(), found.getPassword())) {
                 return new APIResponse(
